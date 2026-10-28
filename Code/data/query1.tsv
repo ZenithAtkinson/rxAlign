@@ -1,0 +1,6 @@
+cohort	ID	regimen_number_within_cancer	drugs_num	Medication	Start	End	os_d_status	tt_os_d1_mos
+NSCLC	GENIE-MSK-P-0008955	1	2	Cisplatin, Pemetrexed Disodium	30	51	0	51.48026316
+NSCLC	GENIE-MSK-P-0008955	2	3	Bevacizumab, Carboplatin, Pemetrexed Disodium	72	177	0	50.09868421
+NSCLC	GENIE-MSK-P-0008955	3	1	Investigational Drug	729		0	28.48684211
+NSCLC	GENIE-MSK-P-0003070	1	1	Erlotinib Hydrochloride	34	517	0	58.78289474
+NSCLC	GENIE-MSK-P-0003070	2	1	Osimertinib	544	1699	0	42.00657895

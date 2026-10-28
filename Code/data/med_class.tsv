@@ -1,0 +1,180 @@
+Medication	Class
+Ceritinib	Targeted
+Brigatinib	Targeted
+Abemaciclib	Targeted
+Abiraterone Acetate	Chemo
+Acalabrutinib	Targeted
+Ado-Trastuzumab Emtansine	Targeted
+Afatinib	Targeted
+Aldesleukin	Other
+Alectinib	Targeted
+Alpelisib	Targeted
+Anastrozole	Chemo
+Atezolizumab	ICB
+Avelumab	ICB
+Axitinib	Targeted
+Azacitidine	Chemo
+Bacillus Calmette-Guerin (BCG)	Other
+Bendamustine Hydrochloride	Chemo
+Bevacizumab	Targeted
+Bicalutamide	Chemo
+Binimetinib	Targeted
+Bleomycin Sulfate	Chemo
+Bortezomib	Targeted
+Brentuximab Vedotin	Targeted
+Cabozantinib	Targeted
+Capecitabine	Chemo
+Carboplatin	Chemo
+Carfilzomib	Targeted
+Carmustine	Chemo
+Cemiplimab	ICB
+Cetuximab	Targeted
+Chemo, NOS	Chemo
+Cisplatin	Chemo
+Cladribine	Chemo
+Cobimetinib	Targeted
+Copanlisib	Targeted
+Crizotinib	Targeted
+Cyclophosphamide	Chemo
+Cytarabine	Chemo
+Dabrafenib	Targeted
+Dacarbazine	Chemo
+Dactinomycin	Chemo
+Dasatinib	Targeted
+Daunorubicin Citrate	Chemo
+Decitabine	Chemo
+Degarelix Acetate	Chemo
+Denosumab	Targeted
+Dexamethasone	Other
+Docetaxel	Chemo
+Doxorubicin Hydrochloride	Chemo
+Durvalumab	ICB
+Eculizumab	Targeted
+Elotuzumab	Targeted
+Encorafenib	Targeted
+Enfortumab Vedotin	Targeted
+Enzalutamide	Targeted
+Epirubicin Hydrochloride	Chemo
+Erdafitinib	Targeted
+Eribulin Mesylate	Chemo
+Erlotinib	Targeted
+Etoposide	Chemo
+Everolimus	Targeted
+Exemestane	Targeted
+Filgrastim	Other
+Floxuridine	Chemo
+Fludarabine Phosphate	Chemo
+Fluorouracil	Chemo
+Flutamide	Targeted
+Folfox Regimen NOS	Chemo
+Folic Acid	Other
+Folinic Acid (Leucovorin)	Chemo
+Fulvestrant	Targeted
+Gemcitabine Hydrochloride	Chemo
+Gemtuzumab Ozogamicin	Targeted
+Given with Investigational Therapy	Other
+Goserelin Acetate	Chemo
+Hydrocortisone	Other
+Hydroxyurea	Chemo
+Ibrutinib	Targeted
+Idarubicin Hydrochloride	Chemo
+Idelalisib	Targeted
+Ifosfamide	Chemo
+Imatinib Mesylate	Targeted
+Imiquimod	Other
+Interferon Alfa-2b	Other
+Interferon Alfa, NOS	Other
+Interferon, NOS	Other
+Interleukin-2	Other
+Investigational Agent	Other
+Ipilimumab	ICB
+Irinotecan Hydrochloride	Chemo
+Irinotecan Liposome	Chemo
+Ixabepilone	Chemo
+Lanreotide	Other
+Lapatinib Ditosylate	Targeted
+Lenalidomide	Chemo
+Lenvatinib	Targeted
+Letrozole	Chemo
+Leucovorin	Chemo
+Leuprolide Acetate	Targeted
+Levothyroxine	Other
+Liothyronine Sodium	Other
+Liposomal Doxorubicin	Chemo
+Lomustine	Chemo
+Lonsurf (TAS 102)	Chemo
+Lorlatinib	Targeted
+Lutetium Lu-177 dotatate	Targeted
+Megestrol Acetate	Chemo
+Melphalan	Chemo
+Mesna	Other
+Methotrexate	Chemo
+Methylprednisolone	Other
+Minocycline Hydrochloride	Other
+Mitomycin	Chemo
+Mitotane	Chemo
+Mitoxantrone Hydrochloride	Chemo
+Neratinib	Targeted
+Nilotinib	Targeted
+Nilutamide	Chemo
+Niraparib	Targeted
+Nivolumab	ICB
+Obinutuzumab	Chemo
+Octreotide	Other
+Olaparib	Targeted
+Olaratumab	Targeted
+Osimertinib	Targeted
+Other	Other
+Oxaliplatin	Chemo
+Paclitaxel	Chemo
+Paclitaxel (protein bound)	Chemo
+Palbociclib	Targeted
+Panitumumab	Targeted
+Pazopanib Hydrochloride	Targeted
+Pegaspargase	Chemo
+Pegfilgrastim	Chemo
+Peginterferon Alfa-2b	Other
+Pembrolizumab	ICB
+Pemetrexed Disodium	Chemo
+Pertuzumab	Targeted
+Pomalidomide	Other
+Ponatinib	Targeted
+Prednisone	Other
+Procarbazine Hydrochloride	Chemo
+Ramucirumab	Targeted
+Regorafenib	Targeted
+Ribociclib	Targeted
+Rituximab	Targeted
+Rucaparib Camsylate	Targeted
+Sipuleucel-T	Other
+Sirolimus	Targeted
+Sorafenib Tosylate	Targeted
+Sunitinib Malate	Targeted
+Tacrolimus	Targeted
+Talimogene Laherparepvec	Other
+Tamoxifen Citrate	Targeted
+Temozolomide	Chemo
+Temsirolimus	Targeted
+Thiotepa	Chemo
+Topotecan Hydrochloride	Chemo
+Tositumomab	Targeted
+Trabectedin	Chemo
+Trametinib	Targeted
+Trastuzumab	Targeted
+Tretinoin	Other
+Unknown/Not Reported	Other
+Vemurafenib	Targeted
+Venetoclax	Targeted
+Vinblastine Sulfate	Chemo
+Vincristine Sulfate	Chemo
+Vinorelbine Tartrate	Chemo
+Vismodegib	Targeted
+Vorinostat	Targeted
+Ziv-aflibercept	Targeted
+Zoledronic acid	Other
+Nabpaclitaxel	Chemo
+Gefitinib	Targeted
+Clinical Trial	Other
+5-Fluorouracil – Chemo	Chemo
+T-DM1	Targeted
+Nabpaclitaxel	Chemo
