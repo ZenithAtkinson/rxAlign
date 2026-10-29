@@ -5,13 +5,25 @@
 from Treatment import *
 
 class Event:
-    def __init__(self, treatments, start, end, ):
+    def __init__(self, treatments, start, end):
         self.treatments = treatments
         self.start = start
         self.end = end
+        self.index = 0
+        self.points_to = None
+
 
 me = Treatment(["organe", "lemon"])
 
 lesgo = Event(me, 1, 2)
 
-print(lesgo.start)
+print(lesgo.points_to)
+
+# Required functions:
+# add treatment(s)
+# add start
+# add end
+# set index
+# pointed toward
+
+
