@@ -15,15 +15,35 @@
 # Add event (given a start date, which it uses to place it in the timeline and point it to corresponding events)
     # will we ever have to remove an event? I dont think so
 # Assign a patient ID
+from Event import Event
+from Treatment import Treatment
 
 class Timeline:
     def __init__(self, patient_ID=None):
         self.patient_ID = patient_ID if patient_ID is not None else "Unassigned"
-        self.event_list = []
-        pass
+        self.event_list: list[Event] = []
+        
 
-    
+    def add_event(self, new_event):
+        # the "existing" variable is an "Event" object
+        for i, existing in enumerate(self.event_list):
+            if existing.start == new_event.start:
+                existing.treatments.add(new_event.treatments.treatment)
+                return
+
+            if existing.start > new_event.start:
+                self.event_list.insert(i, new_event)
+                return
+        # this'll only run if its after (because of the returns above)
+        self.event_list.append(new_event)
 
 
-
+if __name__ == "__main__":
+    t = Timeline("test")
+    t.add_event(Event(Treatment(["orange"]), 10, 20))
+    t.add_event(Event(Treatment(["lemon"]), 1, 5))
+    t.add_event(Event(Treatment(["lime"]), 30, 40))
+    t.add_event(Event(Treatment(["apple"]), 1, 3))
+    for e in t.event_list:
+        print(e.start, e.treatments)
 
