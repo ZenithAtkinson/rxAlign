@@ -12,3 +12,8 @@ class Treatment:
 
     def __str__(self):
         return str(self.treatment)
+
+    def add(self, drugs):
+        self.treatment.extend(drugs)
+        self.treatment.sort()
+        self.length = len(self.treatment)

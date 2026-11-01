@@ -9,15 +9,13 @@ class Event:
         self.treatments = treatments
         self.start = start
         self.end = end
-        self.index = 0
-        self.points_to = None
 
 
-me = Treatment(["organe", "lemon"])
+#me = Treatment(["organe", "lemon"])
 
-lesgo = Event(me, 1, 2)
+#lesgo = Event(me, 1, 2)
 
-print(lesgo.points_to)
+#print(lesgo.points_to)
 
 # Required functions:
 # add treatment(s)
