@@ -18,15 +18,11 @@ def load_timelines(path):
                 if drug == "":                 # this regimen has fewer than n drugs
                     continue                   # skip to the next n
                 # clean the drug name, read start/end, make an Event, add_event it
-                start = row[f"drugs_startdt_int_{n}"]
-                if start == "":
-                    continue
-                start = float(start) #making it work for any "date" columns we want to use
+                start = row[f"dx_drug_start_int_{n}"] #days since diagnosis
+                start = float(start) if start != "" else None #Checking if the end date is blank (ongoing treatment)
 
                 end = row[f"dx_drug_end_int_{n}"]
-                if end == "":
-                    continue
-                end = float(end) #making it work for any "date" columns we want to use
+                end = float(end) if end != "" else None #CHecking if the end date is blank (ongoing treatment)
 
                 #adding these to a new event:
                 patient_data.add_event(Event(Treatment([drug]), start, end))
@@ -34,20 +30,20 @@ def load_timelines(path):
 
     return timelines
 
-timelines = load_timelines("C:/Users/Zenith/PhDCoding/rxAlign/Data/regimen_cancer_level_dataset.csv")
+#timelines = load_timelines("C:/Users/Zenith/PhDCoding/rxAlign/Data/regimen_cancer_level_dataset.csv")
 # Testing first patient in timeline
-first = list(timelines.values())[0]
-second = list(timelines.values())[1]
-third = list(timelines.values())[2]
-print(first.patient_ID)
-for e in first.event_list:
-    print(e.start, e.treatments)
+#first = list(timelines.values())[0]
+#second = list(timelines.values())[1]
+#third = list(timelines.values())[2]
+#print(first.patient_ID)
+#for e in first.event_list:
+#    print(e.start, e.treatments)
 
-print(second.patient_ID)
-for e in second.event_list:
-    print(e.start, e.treatments)
+#print(second.patient_ID)
+#for e in second.event_list:
+#    print(e.start, e.treatments)
 
-print(third.patient_ID)
-for e in third.event_list:
-    print(e.start, e.treatments)
-print(third.event_list)
+#print(third.patient_ID)
+#for e in third.event_list:
+#    print(e.start, e.treatments)
+#print(third.event_list)

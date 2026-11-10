@@ -139,3 +139,4 @@ if __name__ == "__main__":
     # They used the distance algorithm, just use their code to get the distance
     # They need distance to generate Dendogram
         # Dendogram is then used for the clustering 
+
