@@ -10,6 +10,7 @@ def event_cost(e1, e2):
     shared = len(e1 & e2)
     total = len(e1 | e2)
     return (1 - (shared / total))
+
 #2: Get the dynamic programming table
 def distance(t1, t2, indel=1.0):
     seq1 = t1.event_list
@@ -51,6 +52,9 @@ def normalized_distance(t1, t2, indel=1.0):
         return 0.0
 
     return distance(t1, t2, indel) / max_distance
+
+
+
 
 
 # ---------------------------------------------------------------------------
@@ -108,3 +112,30 @@ if __name__ == "__main__":
         symmetric = distance(t1, t2) == distance(t2, t1)
         ok = "OK " if (raw == exp_raw and norm == exp_norm and symmetric) else "BAD"
         print(f"  {ok} {name} raw={raw} (expect {exp_raw})  norm={norm} (expect {exp_norm})  symmetric={symmetric}")
+
+
+
+
+
+# Patient -> vector of treatments
+# Cluster based on the ordering of the treatments
+#i.e. city names, london and paris are clustered because they are both capitals
+#Using transformer
+# Timeline Data -> Embeddings
+# Google clustering embedding vectors (see google AI)
+    # for each patient, we generate the embeddings. Then we code to vectors and can compare two patients based on how similar they are using a PCA or a UMAP
+    # if we can encode all the treatments (if they have it, no, etc) into one vector, and then can think about how every vector will be "yes" or "no". With that encoded can then cluster it. This doesnt consider the ordering however
+    # may not have to encode the ordering? you can do 1,2,3,4,5 
+    # each column is a patient
+    # every row is a given medicate. Its boolean, with yes or no. Can look for "number of unique medications"
+    # How would i implement the ordering?
+    # 3rd dimension for ordering. GOOGLE THIS IT MAY ALREADY EXIST
+    # next week be ready to show the embeddings
+
+
+
+#TOTALL SEPARATE 
+# Check what the algorithm is the previous students used
+    # They used the distance algorithm, just use their code to get the distance
+    # They need distance to generate Dendogram
+        # Dendogram is then used for the clustering 
