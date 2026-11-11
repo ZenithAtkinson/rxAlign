@@ -23,8 +23,9 @@ for patient_id, timeline in ze_timelines.items():
 #first = list(patient_drugs.keys())[0]
 #print(first)
 
-all_drugs = {}
-for patient in patient_drugs:
-    for drug in patient_drugs[patient]:
-        for d in drugs:
-            print(d)
+all_drugs = set()
+for drugs in patient_drugs.values():
+    all_drugs.update(drugs)
+all_drugs = sorted(all_drugs)
+print(all_drugs)
+
