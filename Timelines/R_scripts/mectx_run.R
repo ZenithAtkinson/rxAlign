@@ -7,7 +7,8 @@
 #   AgeAtMedStart/Stop <- drug start/end, in YEARS SINCE DIAGNOSIS (mectx only uses differences, so
 #                        "years since diagnosis" works the same as age)
 #   AgeAtLastContact  <- death / last contact = regimen drug-1 start + tt_os_d1_days
-#   treatment_group   <- drug class (Chemo, IO, Targeted, Hormone, Ancillary, Others)
+#   treatment_group   <- drug category (Chemo, IO, Small_Molecule, Targeted, Hormone, Ancillary, Others),
+#                        from patient_drug_categories.csv: run drug_categories.R FIRST
 #   diagsurvtime      <- overall survival from diagnosis, in years;  status <- os_d_status
 suppressPackageStartupMessages({
   library(mectx)
@@ -17,15 +18,15 @@ suppressPackageStartupMessages({
 })
 
 # ALEX - This is just for me when im remote vs at home
-pathlaptop <- "C:/Users/default.DESKTOP-UOBTTU9/Bioinformatics Lesgo/rxAlign"
-#pathhome <- "C:/Users/Zenith/PhDCoding/rxAlign"
+#pathlaptop <- "C:/Users/default.DESKTOP-UOBTTU9/Bioinformatics Lesgo/rxAlign"
+pathhome <- "C:/Users/Zenith/PhDCoding/rxAlign"
 
-ROOT <- pathlaptop
-#ROOT <- pathhome
+#ROOT <- pathlaptop
+ROOT <- pathhome
 
 #setting up the paths based on root
 DATA_PATH <- file.path(ROOT, "data", "regimen_cancer_level_dataset.csv")
-MED_CLASS_PATH <- file.path(ROOT, "Code", "data", "med_class.tsv")
+CATEGORIES_PATH <- file.path(ROOT, "Timelines", "R_scripts", "patient_drug_categories.csv")  # made by drug_categories.R
 OUT_DIR <- file.path(ROOT, "Timelines", "R_scripts")       # CSV output
 PLOT_DIR <- file.path(OUT_DIR, "plots")                     # plot output
 
@@ -36,28 +37,10 @@ INDEX_CANCER_ONLY <- TRUE    # skip regimens for a patient's other cancers (redc
 DAYS_PER_YEAR <- 365.25 #needed for age calculations, is the .25 fine?
 
 # SETUP TO MECTX FORMAT:
-# 1. drug -> treatment class 
-# start from byu group med_class.tsv (Targeted / Chemo / ICB / Other)
-med_class <- read.delim(MED_CLASS_PATH, stringsAsFactors = FALSE)
-drug_class <- setNames(
-  c(Targeted = "Targeted", Chemo = "Chemo", ICB = "IO", Other = "Others")[med_class$Class],
-  toupper(trimws(med_class$Medication))
-)
-# drugs missing from med_class.tsv, plus hormone therapies (mectx has a separate Hormone class)
-overrides <- list(
-  Targeted = c("AFATINIB DIMALEATE", "CABOZANTINIB SMALATE", "DARATUMUMAB", "ENSARTINIB", "ENTRECTINIB",
-               "ERLOTINIB HYDROCHLORIDE", "ICOTINIB", "NAVITOCLAX", "NECITUMUMAB", "RITUXIMAB AND HYALURONIDASE HUMAN",
-               "ROCILETINIB", "RUXOLITINIB PHOSPHATE", "TRASTUZUMAB EMTANSINE"),
-  Chemo = c("ARSENIC TRIOXIDE", "BLEOMYCIN", "BUSULFAN", "CHLORAMBUCIL", "ETOPOSIDE PHOSPHATE", "LURBINECTEDIN",
-            "MECHLORETHAMINE HYDROCHLORIDE", "PACLITAXEL LOADED POLYMERIC MICELLE", "PACLITAXEL POLIGLUMEX",
-            "PACLITAXEL TREVATIDE", "PEGYLATED LIPOSOMAL DOXORUBICIN HYDROCHLORIDE", "VINCRISTINE SULFATE LIPOSOME"),
-  IO = c("TREMELIMUMAB", "BCG SOLUTION", "BCG VACCINE"),
-  Hormone = c("ANASTROZOLE", "LETROZOLE", "TAMOXIFEN CITRATE", "EXEMESTANE", "LEUPROLIDE ACETATE", "BICALUTAMIDE",
-              "DEGARELIX", "MEGESTROL ACETATE", "ABIRATERONE ACETATE", "LANREOTIDE ACETATE", "OTHER HORMONE"),
-  Ancillary = c("LEUCOVORIN CALCIUM"),
-  Others = c("INVESTIGATIONAL DRUG", "OTHER ANTINEOPLASTIC", "OTHER NOS")
-)
-for (cls in names(overrides)) drug_class[overrides[[cls]]] <- cls
+# 1. drug -> treatment category, from drug_categories.R (WHO ATC-based; see the reason column there)
+categories <- read.csv(CATEGORIES_PATH, stringsAsFactors = FALSE)
+categories <- categories[!duplicated(categories$drug), ]
+drug_class <- setNames(categories$category, categories$drug)
 
 # ---------- read + reshape GENIE data ----------
 raw <- read.csv(DATA_PATH, stringsAsFactors = FALSE, na.strings = c("", "NA"))
@@ -77,11 +60,12 @@ drugs <- bind_rows(lapply(1:5, function(n) {
 
 base_name <- toupper(trimws(sub("\\(.*$", "", drugs$drug)))   # drop the "(synonyms...)"
 unmapped <- setdiff(unique(base_name), names(drug_class))
-if (length(unmapped) > 0) message("No class for (using Others): ", paste(unmapped, collapse = ", "))
+if (length(unmapped) > 0) stop("No category for: ", paste(unmapped, collapse = ", "),
+                               "\n  -> add them to drug_categories.R and re-run it")
 
 med_data <- drugs %>%
   mutate(Medication = base_name,
-         treatment_group = unname(ifelse(base_name %in% names(drug_class), drug_class[base_name], "Others"))) %>%
+         treatment_group = unname(drug_class[base_name])) %>%
   group_by(sample) %>%
   mutate(AgeAtLastContact = max(last_contact, na.rm = TRUE) / DAYS_PER_YEAR) %>%
   ungroup() %>%
@@ -99,6 +83,15 @@ metadata <- raw %>%
 message(sprintf("%d patients, %d drug records", n_distinct(med_data$sample), nrow(med_data)))
 
 # ---------- MEC-TX pipeline ----------
+# NOTE: 44 patients get dropped here (1283 -> 1239, see the "Sample audit" mectx prints).
+# tx_normalize() throws away any drug record whose stop date is not AFTER its start date
+# (it keeps only AgeAtMedStop > AgeAtMedStart). 491 records have end date == start date
+# (mostly single-dose / single-cycle regimens: pemetrexed, carboplatin, cisplatin, docetaxel, ...),
+# so they're all removed. For 44 patients that was every drug they had, so they have no timeline
+# left and drop out of the clustering and survival analysis entirely.
+# These are likely sicker patients (one cycle, then stopped), so this can bias the survival results.
+# TODO: keep these patients by giving end == start records a minimum length before this line,
+#       e.g. end = pmax(end, start + 1) in days (check with PI first).
 norm <- tx_normalize(med_data, metadata)
 res <- tx_cluster_surv(metadata, norm)
 write.csv(res$Cluster_surv, file.path(OUT_DIR, "mectx_clusters.csv"), row.names = FALSE)
