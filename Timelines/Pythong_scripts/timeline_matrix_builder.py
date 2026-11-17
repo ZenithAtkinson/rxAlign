@@ -3,6 +3,8 @@ import sys
 import pandas as pd
 import numpy as np
 
+# using python for its packages
+
 CLASSES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "Classes")
 sys.path.insert(0, CLASSES_DIR)
 
@@ -46,5 +48,5 @@ for drug in all_drugs:
 df = pd.DataFrame(matrix, index=all_drugs, columns=patient_ids)
 df = df.T
 
-df.to_csv("drug_matrix.csv")
+df.to_csv(os.path.join(os.path.dirname(os.path.abspath(__file__)), "drug_matrix.csv"))   # save next to this script
 

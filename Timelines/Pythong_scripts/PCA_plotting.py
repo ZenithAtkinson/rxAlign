@@ -8,13 +8,17 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
+#using python for sklearn and scipy
 
-df = pd.read_csv("drug_matrix.csv", index_col=0)
+# folder this script is in (Pythong_scripts), so files are found/saved there no matter where it's run from
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+df = pd.read_csv(os.path.join(SCRIPT_DIR, "drug_matrix.csv"), index_col=0)
 coords = PCA(n_components=2).fit_transform(df)
 
 plt.figure()
 plt.scatter(coords[:,0], coords[:, 1], s=5, alpha=0.4)
-plt.savefig("pca.png")
+plt.savefig(os.path.join(SCRIPT_DIR, "pca.png"))
 
 ks = range(2, 16)
 
@@ -54,19 +58,20 @@ ax[1].set_title("Silhouette (higher = better)")
 ax[1].set_xlabel("k")
 ax[1].legend()
 fig.tight_layout()
-fig.savefig("cluster_count.png")
+fig.savefig(os.path.join(SCRIPT_DIR, "cluster_count.png"))
 
 # --- final clusters: k-means ---
 # (hierarchical + jaccard put ~1390 patients in one cluster and split off single
 #  patients with rare drugs, so its silhouette scores above are misleading)
-K = 6
+# i dont see a clear elbow, maybe 5? But silhouette agrees on 11 as the best too.
+K = 11
 labels = KMeans(n_clusters=K, random_state=0, n_init=10).fit_predict(df) + 1
 
 plt.figure(figsize=(7, 5))
 points = plt.scatter(coords[:, 0], coords[:, 1], s=5, alpha=0.5, c=labels, cmap="tab10")
 plt.legend(*points.legend_elements(), title="cluster", fontsize=7, loc="best")
 plt.title(f"PCA colored by k-means cluster (k={K})")
-plt.savefig("pca_clusters.png")
+plt.savefig(os.path.join(SCRIPT_DIR, "pca_clusters.png"))
 
 # what's in each cluster: size + drugs given to the most patients in it
 short_names = [c.split("(")[0] for c in df.columns]   # drop the "(synonyms...)" for printing

@@ -1,9 +1,10 @@
 # Matches every drug a patient has to a treatment category, with the reason for that category.
 # Drug name = the text before "(", e.g. "Carboplatin(Paraplatin,...)" -> "CARBOPLATIN".
-# Each group below = one category + one reason + the drugs it applies to.
-# Reasons are the drug's WHO ATC code (looked up by Timelines/scripts/drug_atc_lookup.py via NLM RxClass).
-# "JUDGEMENT CALL" = the ATC code doesn't settle the category (or there is none); check these with your PI.
-# Stops with an error if any drug in the data isn't in a group below.
+# each group below = one category + one reason + the drugs it applies to
+# reasons are the drug's WHO ATC code (looked up by Timelines/scripts/drug_atc_lookup.py via NLM RxClass)
+# TODO: "JUDGEMENT CALL" = the ATC code doesn't settle the category (or there is none); AC - Can you look at this? 
+# stops with an error if any drug in the data isn't in a group below.
+# reasons have been mostly been given by claude and my own research from databases (see drug_atc_lookup.py)
 #
 # Run:     Rscript Timelines/R_scripts/drug_categories.R
 # Output:  Timelines/R_scripts/patient_drug_categories.csv  (one row per patient drug: record_id, drug, category, reason)
@@ -132,12 +133,12 @@ if (any(duplicated(all_drugs))) stop("Drug in more than one group: ", paste(all_
 data <- read.csv(file.path(ROOT, "Data", "regimen_cancer_level_dataset.csv"),
                  stringsAsFactors = FALSE, na.strings = c("", "NA"))
 
-# one row per drug: each regimen row has up to 5 drugs (drugs_drug_1 .. drugs_drug_5)
+# one row per drug: each regimen row has up to 5 drugs
 drugs <- do.call(rbind, lapply(1:5, function(n) {
   d <- data[[paste0("drugs_drug_", n)]]
   has_drug <- !is.na(d)
   data.frame(record_id = data$record_id[has_drug],
-             drug = toupper(trimws(sub("\\(.*$", "", d[has_drug]))))   # text before "("
+             drug = toupper(trimws(sub("\\(.*$", "", d[has_drug]))))   # text before "(", just cleanin up
 }))
 
 drugs$category <- unname(category_of[drugs$drug])
@@ -146,6 +147,7 @@ drugs$reason <- unname(reason_of[drugs$drug])
 unmatched <- unique(drugs$drug[is.na(drugs$category)])
 if (length(unmatched) > 0) stop("No category for: ", paste(unmatched, collapse = ", "))
 
+# new .csv file just for fun
 write.csv(drugs, file.path(ROOT, "Timelines", "R_scripts", "patient_drug_categories.csv"), row.names = FALSE)
 
 cat(nrow(drugs), "drugs from", length(unique(drugs$record_id)), "patients, all matched\n")

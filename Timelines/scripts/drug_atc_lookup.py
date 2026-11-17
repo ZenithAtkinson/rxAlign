@@ -2,12 +2,12 @@
 # turns each ATC code into a MEC-TX treatment class, and compares that to the current mapping
 # (Code/data/med_class.tsv + the overrides in Timelines/R_scripts/mectx_run.R).
 #
-# Run:     python Timelines/scripts/drug_atc_lookup.py      (from anywhere; needs internet)
-# Output:  Timelines/scripts/drug_atc_classes.csv           (one row per drug)
+# RUN:python Timelines/scripts/drug_atc_lookup.py      
+# OUTPUT:Timelines/scripts/drug_atc_classes.csv           
 #
 # Only drug names are sent to the API (https://rxnav.nlm.nih.gov), never patient data.
 # API docs: https://lhncbc.nlm.nih.gov/RxNav/APIs/RxClassAPIs.html
-# ATC index (to look up any code by hand): https://atcddd.fhi.no/atc_ddd_index/
+# ATC index: https://atcddd.fhi.no/atc_ddd_index/
 
 import csv
 import json
@@ -17,7 +17,7 @@ import urllib.parse
 import urllib.request
 from collections import Counter
 
-# ---------- paths (found relative to this file, so it works on the laptop and at home) ----------
+# ---------- paths (for my home vs work) ----------
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 DATA_PATH = os.path.join(ROOT, "Data", "regimen_cancer_level_dataset.csv")
 MED_CLASS_PATH = os.path.join(ROOT, "Code", "data", "med_class.tsv")
@@ -66,7 +66,7 @@ NAME_EXCEPTIONS = {
 
 # Drugs RxClass has no ATC code for (not in RxNorm, or a placeholder name). These are judgement calls,
 # NOT from the API: verify each one (NCI Drug Dictionary: https://www.cancer.gov/publications/dictionaries/cancer-drug)
-# and get your PI to sign off. They show up with status "MANUAL" in the output.
+# TODO: AC, there are some drugs that need manual review because im not sure
 MANUAL = {
     "ENSARTINIB":           ("Small_Molecule", "ALK tyrosine kinase inhibitor; not FDA-approved during data collection, so not in RxNorm"),
     "ICOTINIB":             ("Small_Molecule", "EGFR tyrosine kinase inhibitor; approved in China only, so not in RxNorm"),

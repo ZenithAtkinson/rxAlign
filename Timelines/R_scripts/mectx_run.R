@@ -32,12 +32,12 @@ PLOT_DIR <- file.path(OUT_DIR, "plots")                     # plot output
 
 dir.create(PLOT_DIR, showWarnings = FALSE, recursive = TRUE)
 
-FINAL_K <- 5            # k to plot / run survival on (all k from 3 to 20 are saved)
-INDEX_CANCER_ONLY <- TRUE    # skip regimens for a patient's other cancers (redcap_ca_index == "No")
+FINAL_K <- 5            # k to plot / run survival on (all k from 3 to 20 are saved, but i think 5 is a good balance. COuld be more?
+INDEX_CANCER_ONLY <- TRUE    # skip regimens for a patient's other cancers (redcap_ca_index == "No"), but could also change this
 DAYS_PER_YEAR <- 365.25 #needed for age calculations, is the .25 fine?
 
 # SETUP TO MECTX FORMAT:
-# 1. drug -> treatment category, from drug_categories.R (WHO ATC-based; see the reason column there)
+# 1. drug -> treatment category, from drug_categories.R (WHO ATC-based; see the reason column there and the drug_categories.R script)
 categories <- read.csv(CATEGORIES_PATH, stringsAsFactors = FALSE)
 categories <- categories[!duplicated(categories$drug), ]
 drug_class <- setNames(categories$category, categories$drug)
@@ -52,7 +52,8 @@ drugs <- bind_rows(lapply(1:5, function(n) {
     sample = record_id,
     drug = .data[[paste0("drugs_drug_", n)]],
     start = .data[[paste0("dx_drug_start_int_", n)]],
-    # end date; if blank, fall back to last administration (if still blank, mectx uses last contact)
+    # end date; if blank, fall back to last administration (if still blank, mectx uses last contact).
+      #this gave me issues so i had to make sure an end date was given or mectx would drop them
     end = coalesce(.data[[paste0("dx_drug_end_int_", n)]], .data[[paste0("dx_drug_end_or_lastadm_int_", n)]]),
     last_contact = dx_drug_start_int_1 + tt_os_d1_days
   )
