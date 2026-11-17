@@ -3,3 +3,10 @@ __pycache__/
 .ipynb_checkpoints/
 Data/
 Results/
+
+# patient-level files derived from GENIE (data-use terms: keep off GitHub)
+Timelines/**/*.csv
+!Timelines/scripts/drug_atc_classes.csv
+Code/data/test.tsv
+Code/data/query1.tsv
+Code/results/
